@@ -1,5 +1,5 @@
-import { onUpdateField, onSubmitForm, onSetError, onSetFormErrors } from "../../common/helpers";
-import { setCheckboxList, setOptionList, formatCheckboxId, onAddImage, onAddFeature, onRemoveFeature, formatDeleteFeatureButtonId } from "./upload-property.helpers";
+import { onUpdateField, onSubmitForm, onSetError, onSetFormErrors, onAddFile } from "../../common/helpers";
+import { setCheckboxList, setOptionList, onAddImage, onAddFeature, onRemoveFeature, formatDeleteFeatureButtonId } from "./upload-property.helpers";
 import { insertNewProperty } from "./upload-property.api";
 import { mapNewPropertyFromVMToApi } from "./upload-property.mappers";
 import { formValidation } from "./upload-property.validators";
@@ -38,6 +38,7 @@ let newProperty = {
 onUpdateField("title", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, title: value };
+
     formValidation.validateField("title", newProperty.title).then(result => {
         onSetError("title", result);
     });
@@ -46,6 +47,7 @@ onUpdateField("title", event => {
 onUpdateField("notes", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, notes: value };
+
     formValidation.validateField("notes", newProperty.notes).then(result => {
         onSetError("notes", result);
     });
@@ -54,6 +56,7 @@ onUpdateField("notes", event => {
 onUpdateField("email", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, email: value };
+
     formValidation.validateField("email", newProperty.email).then(result => {
         onSetError("email", result);
     });
@@ -62,6 +65,7 @@ onUpdateField("email", event => {
 onUpdateField("phone", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, phone: value };
+
     formValidation.validateField("phone", newProperty.phone).then(result => {
         onSetError("phone", result);
     });
@@ -70,6 +74,7 @@ onUpdateField("phone", event => {
 onUpdateField("price", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, price: value };
+
     formValidation.validateField("price", newProperty.price).then(result => {
         onSetError("price", result);
     });
@@ -91,6 +96,7 @@ onUpdateField("saleTypes", event => {
 onUpdateField("address", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, address: value };
+
     formValidation.validateField("address", newProperty.address).then(result => {
         onSetError("address", result);
     });
@@ -99,6 +105,7 @@ onUpdateField("address", event => {
 onUpdateField("city", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, city: value };
+
     formValidation.validateField("city", newProperty.city).then(result => {
         onSetError("city", result);
     });
@@ -107,6 +114,7 @@ onUpdateField("city", event => {
 onUpdateField("province", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, provinceId: value };
+
     formValidation.validateField("province", newProperty.provinceId).then(result => {
         onSetError("province", result);
     });
@@ -115,6 +123,7 @@ onUpdateField("province", event => {
 onUpdateField("squareMeter", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, squareMeter: value };
+
     formValidation.validateField("squareMeter", newProperty.squareMeter).then(result => {
         onSetError("squareMeter", result);
     });
@@ -123,6 +132,7 @@ onUpdateField("squareMeter", event => {
 onUpdateField("rooms", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, rooms: value };
+
     formValidation.validateField("rooms", newProperty.rooms).then(result => {
         onSetError("rooms", result);
     });
@@ -131,6 +141,7 @@ onUpdateField("rooms", event => {
 onUpdateField("bathrooms", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, bathrooms: value };
+
     formValidation.validateField("bathrooms", newProperty.bathrooms).then(result => {
         onSetError("bathrooms", result);
     });
@@ -148,7 +159,6 @@ onUpdateField("locationUrl", event => {
 onUpdateField("mainFeatures", event => {
     const value = event.target.value;
     newProperty = { ...newProperty, mainFeatures: value };
-
 });
 
 onUpdateField("equipments", event => {
@@ -164,10 +174,9 @@ onUpdateField("equipments", event => {
     });
 });
 
-onUpdateField("images", event => {
-    const value = event.target.value;
-    newProperty = { ...newProperty, images: value };
-    onAddImage(value);
+onAddFile("add-image", img => {
+    newProperty = { ...newProperty, images: [...newProperty.images, img] };
+    onAddImage(img);
 });
 
 onSubmitForm("insert-feature-button", () => {
@@ -181,26 +190,25 @@ onSubmitForm("insert-feature-button", () => {
             const index = newProperty.mainFeatures.indexOf(value);
             newProperty.mainFeatures.splice(index, 1);
         });
-
     }
 });
-const clearForm = () => {
-    newFeature = { newFeature: null };
-};
+
+
 
 const onSave = () => {
     const apiNewProperty = mapNewPropertyFromVMToApi(newProperty);
-    alert("Gracias por contactar con nosotros. Te responderemos enseguida.");
     return insertNewProperty(apiNewProperty);
-
 };
 
 onSubmitForm("save-button", () => {
     formValidation.validateForm(newProperty).then(result => {
         onSetFormErrors(result);
         if (result.succeeded) {
-            onSave();
-            console.log(newProperty)
+            onSave().then(() => {
+                console.log(newProperty);
+                alert("Tu vivienda ha sido registrada correctamente.");
+                history.back();
+            });
         }
     });
 });

@@ -3,7 +3,6 @@ import { isNumber } from '@lemoncode/fonk-is-number-validator';
 import { isUrl } from "@lemoncode/fonk-is-url-validator";
 import { arrayRequired } from "@lemoncode/fonk-array-required-validator";
 
-
 const validationSchema = {
     field: {
         title: [
@@ -121,6 +120,5 @@ const validationSchema = {
         ],
     },
 };
-
 
 export const formValidation = createFormValidation(validationSchema);

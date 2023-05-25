@@ -1,4 +1,3 @@
-
 export const mapPropertyListFromApiToVM = propertyList => {
     return propertyList.map(property => mapPropertyFromApiToVM(property));
 };
@@ -39,9 +38,7 @@ export const mapFilterToQueryParams = filter => {
     if (filter.maxPrice) {
         queryParams = `${queryParams}price_lte=${filter.maxPrice}&`;
     }
-
     return queryParams.slice(0, -1);
-
 }
 
 

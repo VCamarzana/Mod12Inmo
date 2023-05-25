@@ -6,7 +6,6 @@ import { mapPropertyDetailFromApiToVM, } from "./property-detail.mappers";
 import { formValidation } from "./property-detail.validators";
 import { getEquipmentsList } from "../../common/api";
 
-
 const params = history.getParams();
 
 Promise.all([

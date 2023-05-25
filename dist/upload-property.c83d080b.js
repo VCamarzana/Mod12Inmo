@@ -5180,12 +5180,11 @@ var newProperty = {
     (0, _helpers.onSetError)("equipments", result);
   });
 });
-(0, _helpers.onUpdateField)("images", function (event) {
-  var value = event.target.value;
+(0, _helpers.onAddFile)("add-image", function (img) {
   newProperty = _objectSpread(_objectSpread({}, newProperty), {}, {
-    images: value
+    images: [].concat(_toConsumableArray(newProperty.images), [img])
   });
-  (0, _uploadProperty.onAddImage)(value);
+  (0, _uploadProperty.onAddImage)(img);
 });
 (0, _helpers.onSubmitForm)("insert-feature-button", function () {
   var value = document.getElementById("newFeature").value;
@@ -5202,22 +5201,19 @@ var newProperty = {
     });
   }
 });
-var clearForm = function clearForm() {
-  newFeature = {
-    newFeature: null
-  };
-};
 var onSave = function onSave() {
   var apiNewProperty = (0, _uploadProperty3.mapNewPropertyFromVMToApi)(newProperty);
-  alert("Gracias por contactar con nosotros. Te responderemos enseguida.");
   return (0, _uploadProperty2.insertNewProperty)(apiNewProperty);
 };
 (0, _helpers.onSubmitForm)("save-button", function () {
   _uploadProperty4.formValidation.validateForm(newProperty).then(function (result) {
     (0, _helpers.onSetFormErrors)(result);
     if (result.succeeded) {
-      onSave();
-      console.log(newProperty);
+      onSave().then(function () {
+        console.log(newProperty);
+        alert("Tu vivienda ha sido registrada correctamente.");
+        history.back();
+      });
     }
   });
 });
@@ -5246,7 +5242,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63193" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65158" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
